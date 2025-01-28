@@ -31,4 +31,4 @@ jobs:
 
     - name: Push Image
       run:
-        docker push chamito/docker-graphql:0.0.1 .
+        docker push chamito/docker-graphql:0.0.1
