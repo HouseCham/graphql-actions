@@ -18,17 +18,29 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Git Semantic Version
+      uses: PaulHatch/semantic-version@v4.0.3
+      with:
+        major_pattern: "major:"
+        minor_pattern: "ft:"
+        format: "${major}.${minor}.${patch}-prerelease${increment}"
+      id: version
+      
     - name: Docker login
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        IMG_VERSION: ${{ steps.version.outputs.version }}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        echo "New version: $IMG_VERSION!!!!"
 
-    - name: Build Image
-      run:
-        docker build -t chamito/docker-graphql:0.0.1 .
+    # - name: Build Image
+    #   run:
+    #     docker build -t chamito/docker-graphql:0.0.1 .
+    #     docker build -t chamito/docker-graphql:latest .
 
-    - name: Push Image
-      run:
-        docker push chamito/docker-graphql:0.0.1
+    # - name: Push Image
+    #   run:
+    #     docker push chamito/docker-graphql:0.0.1
+    #     docker push chamito/docker-graphql:latest
