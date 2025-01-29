@@ -30,17 +30,19 @@ jobs:
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        IMG_VERSION: ${{ steps.version.outputs.version }}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        echo "New version: $IMG_VERSION!!!!"
 
-    # - name: Build Image
-    #   run:
-    #     docker build -t chamito/docker-graphql:0.0.1 .
-    #     docker build -t chamito/docker-graphql:latest .
+    - name: Build Image
+      env:
+        IMG_VERSION: ${{ steps.version.outputs.version }}
+      run:
+        docker build -t chamito/docker-graphql:$IMG_VERSION .
+        docker build -t chamito/docker-graphql:latest .
 
-    # - name: Push Image
-    #   run:
-    #     docker push chamito/docker-graphql:0.0.1
-    #     docker push chamito/docker-graphql:latest
+    - name: Push Image
+      env:
+        IMG_VERSION: ${{ steps.version.outputs.version }}
+      run:
+        docker push chamito/docker-graphql:$IMG_VERSION
+        docker push chamito/docker-graphql:latest
